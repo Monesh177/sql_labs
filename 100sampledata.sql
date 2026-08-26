@@ -1,55 +1,50 @@
-INSERT INTO Users (UserID, FirstName, LastName, Email, CreatedAt) VALUES
-(1, 'John', 'Doe', 'john.doe@example.com', '2026-01-10'),
-(2, 'Jane', 'Smith', 'jane.smith@example.com', '2026-02-14'),
-(3, 'Alice', 'Johnson', 'alice.johnson@example.com', '2026-03-21'),
-(4, 'Bob', 'Brown', 'bob.brown@example.com', '2026-04-07'),
-(5, 'Charlie', 'Davis', 'charlie.davis@example.com', '2026-05-15'),
-(6, 'Diana', 'Miller', 'diana.miller@example.com', '2026-06-19'),
-(7, 'Evan', 'Wilson', 'evan.wilson@example.com', '2026-07-03'),
-(8, 'Fiona', 'Taylor', 'fiona.taylor@example.com', '2026-07-17'),
-(9, 'George', 'Anderson', 'george.anderson@example.com', '2026-08-01'),
-(10, 'Hannah', 'Thomas', 'hannah.thomas@example.com', '2026-08-20');
+INSERT INTO departments (department_id, department_name, location) VALUES
+(1, 'Human Resources', 'Mumbai'),
+(2, 'Finance', 'Thane'),
+(3, 'IT', 'Pune'),
+(4, 'Sales', 'Mumbai'),
+(5, 'Marketing', 'Navi Mumbai');
 
--- Products Table
-INSERT INTO Products (ProductID, ProductName, Price, StockQty) VALUES
-(1, 'Laptop', 1200.00, 15),
-(2, 'Smartphone', 800.00, 30),
-(3, 'Headphones', 150.00, 50),
-(4, 'Smartwatch', 200.00, 35),
-(5, 'Keyboard', 70.00, 40),
-(6, 'Mouse', 50.00, 80),
-(7, 'Monitor', 300.00, 20),
-(8, 'Printer', 250.00, 10),
-(9, 'Webcam', 90.00, 25),
-(10, 'Speaker', 120.00, 30);
+INSERT INTO orders (order_id, order_date, customer_id, employee_id, department_id, amount, status) VALUES
+(101, '2026-08-01', 1001, 5001, 4, 2500.00, 'Pending'),
+(102, '2026-08-03', 1002, 5002, 4, 1800.00, 'Shipped'),
+(103, '2026-08-05', 1003, 5003, 2, 3200.00, 'Delivered'),
+(104, '2026-08-07', 1004, 5004, 1, 1500.00, 'Cancelled'),
+(105, '2026-08-10', 1005, 5005, 3, 4200.00, 'Pending');
 
--- Orders Table
-INSERT INTO Orders (OrderID, UserID, OrderDate, TotalAmount) VALUES
-(1, 1, '2026-08-01', 1250.00),
-(2, 2, '2026-08-02', 800.00),
-(3, 3, '2026-08-03', 400.00),
-(4, 4, '2026-08-04', 220.00),
-(5, 5, '2026-08-05', 350.00),
-(6, 6, '2026-08-06', 500.00),
-(7, 7, '2026-08-07', 1200.00),
-(8, 8, '2026-08-08', 300.00),
-(9, 9, '2026-08-09', 450.00),
-(10, 10, '2026-08-10', 150.00);
+INSERT INTO employees (emp_id, first_name, last_name, email, phone_number, hire_date, job_title, salary, department, manager_id) VALUES
+(1, 'John', 'Doe', 'john.doe@example.com', '9876543210', '2020-01-15', 'Software Engineer', 60000, 'IT', NULL),
+(2, 'Jane', 'Smith', 'jane.smith@example.com', '9876543211', '2019-03-10', 'Project Manager', 85000, 'IT', 1),
+(3, 'Emily', 'Johnson', 'emily.johnson@example.com', '9876543212', '2021-07-22', 'Data Analyst', 55000, 'Analytics', 2),
+(4, 'Michael', 'Brown', 'michael.brown@example.com', '9876543213', '2018-11-05', 'HR Manager', 75000, 'HR', NULL),
+(5, 'Sara', 'Davis', 'sara.davis@example.com', '9876543214', '2022-05-18', 'Marketing Executive', 50000, 'Marketing', 4),
+(6, 'David', 'Wilson', 'david.wilson@example.com', '9876543215', '2021-09-12', 'Software Engineer', 62000, 'IT', 2),
+(7, 'Emma', 'Taylor', 'emma.taylor@example.com', '9876543216', '2020-12-20', 'Business Analyst', 58000, 'Analytics', 2),
+(8, 'James', 'Anderson', 'james.anderson@example.com', '9876543217', '2019-08-30', 'Finance Manager', 80000, 'Finance', NULL),
+(9, 'Olivia', 'Thomas', 'olivia.thomas@example.com', '9876543218', '2023-01-10', 'Intern', 30000, 'IT', 1),
+(10, 'Daniel', 'Moore', 'daniel.moore@example.com', '9876543219', '2022-03-25', 'Software Engineer', 61000, 'IT', 2);
 
--- OrderItems Table
-INSERT INTO OrderItems (OrderItemID, OrderID, ProductID, Quantity, UnitPrice) VALUES
-(1, 1, 1, 1, 1200.00),
-(2, 1, 6, 1, 50.00),
-(3, 2, 2, 1, 800.00),
-(4, 3, 4, 2, 200.00),
-(5, 4, 5, 1, 70.00),
-(6, 4, 9, 1, 150.00),
-(7, 5, 3, 1, 150.00),
-(8, 5, 6, 4, 50.00),
-(9, 6, 7, 1, 300.00),
-(10, 6, 8, 1, 250.00),
-(11, 7, 1, 1, 1200.00),
-(12, 8, 7, 1, 300.00),
-(13, 9, 2, 1, 800.00),
-(14, 9, 10, 1, 120.00),
-(15, 10, 3, 1, 150.00);
+INSERT INTO customers (customer_id, customer_name) VALUES
+(1, 'Alice Johnson'),
+(2, 'Bob Smith'),
+(3, 'Charlie Brown'),
+(4, 'Diana Prince'),
+(5, 'Ethan Hunt'),
+(6, 'Fiona Gallagher'),
+(7, 'George Clooney'),
+(8, 'Hannah Montana'),
+(9, 'Ian Somerhalder'),
+(10, 'Julia Roberts');
+
+-- Insert sample data into products table
+INSERT INTO products (product_id, product_name) VALUES
+(1, 'Laptop'),
+(2, 'Smartphone'),
+(3, 'Wireless Mouse'),
+(4, 'Keyboard'),
+(5, 'Monitor'),
+(6, 'Printer'),
+(7, 'USB Cable'),
+(8, 'External Hard Drive'),
+(9, 'Webcam'),
+(10, 'Smartwatch');
