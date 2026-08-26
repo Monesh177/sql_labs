@@ -186,4 +186,43 @@ CREATE TABLE FactSales (
   TotalAmount DECIMAL(10,2),
   FOREIGN KEY (DateKey) REFERENCES DimDate(DateKey),
   FOREIGN KEY (CustomerKey) REFERENCES DimCustomer(CustomerKey),
-  FOREIGN KEY (ProductKey) REFER
+  FOREIGN KEY (ProductKey) REFERENCES DimProduct(ProductKey)
+);
+Explanation:
+
+Central table for quantitative metrics.
+References all dimensions through foreign keys.
+This structure = Star Schema.
+
+Step 4: Populate Dimensions
+INSERT INTO DimCustomer (CustomerID, CustomerName, City)
+VALUES (1,'Amit Sharma','Delhi'),(2,'Neha Verma','Mumbai');
+
+INSERT INTO DimProduct (ProductID, ProductName, Category)
+VALUES (1,'Laptop','Electronics'),(2,'Mouse','Electronics'),(3,'Shoes','Fashion');
+
+INSERT INTO DimDate (FullDate, Year, Month, Day)
+VALUES ('2025-10-01',2025,10,1),('2025-10-02',2025,10,2);
+
+Step 5: Populate Fact Table
+INSERT INTO FactSales (DateKey, CustomerKey, ProductKey, Quantity, TotalAmount)
+VALUES (1,1,1,1,65000),
+       (1,1,2,2,1600),
+       (2,2,3,1,2500);
+Explanation:
+
+Each row represents a sales event, linking to multiple dimensions by surrogate keys.
+
+
+Step 6: Query Star Schema
+SELECT d.FullDate, c.CustomerName, p.ProductName,
+       f.Quantity, f.TotalAmount
+FROM FactSales f
+JOIN DimCustomer c ON f.CustomerKey=c.CustomerKey
+JOIN DimProduct p ON f.ProductKey=p.ProductKey
+JOIN DimDate d ON f.DateKey=d.DateKey;
+
+
+Expected Output:
+
+Consolidated fact data showing who bought what, when, and for how much
