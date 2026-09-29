@@ -1,0 +1,98 @@
+import java.util.*;
+
+public class CollectionDemo {
+
+    // 1. Introduction to Collection
+    static void introduction() {
+        System.out.println("=== Introduction to Collection ===");
+
+        ArrayList<String> fruits = new ArrayList<>();
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Mango");
+
+        System.out.println(fruits);
+    }
+
+    // 2. List
+    static void listDemo() {
+        System.out.println("\n=== List Demo ===");
+
+        List<Integer> arrayList = new ArrayList<>();
+        List<Integer> linkedList = new LinkedList<>();
+
+        arrayList.add(10);
+        arrayList.add(20);
+        arrayList.add(30);
+
+        linkedList.add(100);
+        linkedList.add(200);
+        linkedList.add(300);
+
+        arrayList.remove(1);
+        linkedList.remove(0);
+
+        System.out.println("ArrayList: " + arrayList);
+        System.out.println("LinkedList: " + linkedList);
+        System.out.println("First element: " + arrayList.get(0));
+    }
+
+    // 3. Generics
+    static <T> void printArray(T[] array) {
+        for (T item : array) {
+            System.out.print(item + " ");
+        }
+        System.out.println();
+    }
+
+    static void genericDemo() {
+        System.out.println("\n=== Generics Demo ===");
+
+        Integer[] numbers = {1, 2, 3, 4};
+        String[] names = {"Alice", "Bob", "Charlie"};
+
+        printArray(numbers);
+        printArray(names);
+    }
+
+    // 4. Set
+    static void setDemo() {
+        System.out.println("\n=== Set Demo ===");
+
+        HashSet<String> names = new HashSet<>();
+        names.add("Alice");
+        names.add("Bob");
+        names.add("Charlie");
+        names.add("Alice");
+
+        System.out.println("HashSet: " + names);
+
+        TreeSet<String> sorted = new TreeSet<>(names);
+        System.out.println("TreeSet: " + sorted);
+    }
+
+    // 5. Map
+    static void mapDemo() {
+        System.out.println("\n=== Map Demo ===");
+
+        HashMap<String, Integer> marks = new HashMap<>();
+
+        marks.put("Deva", 95);
+        marks.put("Rahul", 88);
+        marks.put("Priya", 91);
+
+        marks.put("Rahul", 90);
+
+        for (Map.Entry<String, Integer> entry : marks.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+
+    public static void main(String[] args) {
+        introduction();
+        listDemo();
+        genericDemo();
+        setDemo();
+        mapDemo();
+    }
+}
