@@ -22,7 +22,7 @@ def load_bioreactor_data(spark: SparkSession, runs_path: str, reactors_path: str
     return runs_df,mas_df
 
 def compute_run_metrics(df: DataFrame) -> DataFrame:
-    dfw = (unix_timestamp("e")- unix_timestamp("s")) / 60
+    dfw = (unix_timestamp("end_ts")- unix_timestamp("start_ts")) / 60
     df = df.withColumn("duration_minutes",when(dfw <=0,0).otherwise(dfw))
     df = df.withColumn("yield_pct",(col("output_mass")/col("input_mass")*100))
     return df
@@ -30,7 +30,7 @@ def compute_run_metrics(df: DataFrame) -> DataFrame:
 def join_reactor_metadata(runs_df: DataFrame, reactors_df: DataFrame) -> DataFrame:
     df = runs_df.join(reactors_df,"reactor_id","inner")
     df = df.withColumn("facility",coalesce(col("facility"),lit("Unknown")))
-    df = df.withColumn("reactor_label",cocat_ws("-","reactor_name","facility"))
+    df = df.withColumn("reactor_label",concat_ws(" - ","reactor_name","facility"))
     return df
 
 def dense_rank_runs_by_yield(df: DataFrame) -> DataFrame:
