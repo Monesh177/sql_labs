@@ -8,18 +8,23 @@ def load_kyc_data(spark: SparkSession, path: str) -> DataFrame:
     return spark.read.csv(path,header=True,inferSchema=True).withColumn("onboarding_date",to_date("onboarding_date"))
 
 def remove_invalid_emails(df: DataFrame) -> DataFrame:
-    return df.filter(col("email").isNotNull() & (trim(col("email")) != " ") & trim(col("email")).rlike(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"))
+    df = df.filter(col("email").isNotNull())
+    df = df.withColumn("email",trim(col("email")))
+    df = df.filter(col("email")!= "")
+    df = df.filter(col("email").rlike(r"^.+@.+\..+$"))
+    return df
 
 def filter_review_customers(df: DataFrame, min_score: int, max_score: int) -> DataFrame:
     return df.filter(col("risk_score").between(min_score,max_score) & (col("kyc_status").isin("PENDING","REVIEW")))
 
 def risk_score_statistics(df: DataFrame) -> dict:
-    result = (df.agg(min("risk_score")).alias("min_score"),max("risk_score").alias("max_score"),avg("risk_score").alias("avg_score"),count("risk_score").alias("total_customers")).collect()[0]
+    df = df.filter(col("risk_score").isNotNull())
+    df = df.agg(min("risk_score").alias("min_score"),max("risk_score").alias("max_score"),avg("risk_score").alias("avg_score"),count("risk_score").alias("total_customers")).collect()
     return {
-        "min_score" : result["min_score"],
-        "max_score" : result["max_score"],
-        "avg_score" : result["avg_score"],
-        "total_customers" : result["total_customers"]
+        "min_score" : df[0]["min_score"],
+        "max_score" : df[0]["max_score"],
+        "avg_score" : df[0]["avg_score"],
+        "total_customers" : df[0]["total_customers"]
     }
 
 def city_highest_average_risk(df: DataFrame) -> tuple:
