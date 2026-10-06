@@ -1,0 +1,36 @@
+from typing import Tuple
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+
+def load_delivery_trips(spark: SparkSession, path: str) -> DataFrame:
+    df = spark.read.csv(path,header=True,inferSchema=True)
+    df = df.withColumn("dispatch_ts",col("dispatch_ts").cast(TimestampType())).withColumn("promised_ts",col("promised_ts").cast(TimestampType())).withColumn("actual_ts",col("actual_ts").cast(TimestampType()))
+    df = df.withColumn("distance_km",col("distance_km").cast(DoubleType())).withColumn("fare_amount",col("fare_amount").cast(DoubleType()))
+    return df
+
+def compute_trip_metrics(df: DataFrame) -> DataFrame:
+    tr = (unix_timestamp("actual_ts")-unix_timestamp("promised_ts")) / 3600
+    df = df.withColumn("delay_hours",when(tr < 0,0.0).otherwise(tr))
+    pr = (unix_timestamp("actual_ts") - unix_timestamp("dispatch_ts")) / 3600
+    df = df.withColumn("trip_hours",when(pr < 0,0.0).otherwise(pr))
+
+    df = df.withColumn("avg_speed_kmph",when(col("trip_hours") >0,col("distance_km")/ col("trip_hours")).otherwise(0.0))
+    return df
+
+def filter_significant_delays(
+    df: DataFrame,
+    delay_threshold: float,
+    min_distance: float
+) -> DataFrame:
+    return df.filter((col("delay_hours") > delay_threshold) & (col("distance_km") >= min_distance))
+
+def partner_delay_summary(df: DataFrame) -> DataFrame:
+    return df.filter(col("status") == "Completed").groupBy("partner").agg(sum("delay_hours").alias("total_delay_hours"),avg("fare_amount").alias("avg_fare"),count("trip_id").alias("trip_count"))
+
+def highest_average_delay_reason(df: DataFrame) -> Tuple[str, float]:
+    df = df.filter(col("delay_reason").isNotNull() & col("delay_hours").isNotNull())
+    dff = (df.groupBy("delay_reason").agg(avg("delay_hours").alias("avg_delay_hours")).orderBy(col("avg_delay_hours").desc(),col("delay_reason").asc())).first()
+    if dff is None:
+        return ("",0.0)
+    return (dff["delay_reason"],float(dff["avg_delay_hours"]))
