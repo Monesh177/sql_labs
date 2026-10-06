@@ -1,0 +1,22 @@
+from typing import Tuple
+from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql.functions import *
+
+def load_battery_swap_data(spark: SparkSession, path: str) -> DataFrame:
+    return spark.read.csv(path,header=True,inferSchema=True).withColumn(("swap_date"),to_date(("swap_date")))
+
+def add_swap_month(df: DataFrame) -> DataFrame:
+    return df.withColumn("swap_month",date_trunc("month",col("swap_date")))
+
+def filter_valid_swaps(df: DataFrame) -> DataFrame:
+    return df.filter((col("energy_kwh") >= 0) & (col("battery_type").isNotNull()))
+
+def monthly_battery_energy(df: DataFrame) -> DataFrame:
+    return  df.groupBy("battery_type","swap_month").agg(sum("energy_kwh").alias("total_energy_kwh"))
+
+def top_battery_type(df: DataFrame) -> Tuple[str, float]:
+    
+    row1 =  df.groupBy("battery_type").agg(sum("total_energy_kwh").alias("total_energy")).orderBy(col("total_energy").desc(),col("battery_type").asc()).first()
+    if row1 is None:
+        return ("",0.0)
+    return (row1["battery_type"],float(row1["total_energy"]))
