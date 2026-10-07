@@ -1,0 +1,17 @@
+from typing import Tuple,List
+from pyspark.sql import SparkSession , DataFrame
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+
+def load_circulation_data(spark: SparkSession , path: str):
+    return spark.read.csv(path,header=True,inferSchema=True).withColumn("borrow_date",to_date("borrow_date")).withColumn("return_date",to_date("return_date"))
+
+def with_late_days(df: DataFrame):
+    return df.withColumn("days",datediff("return_date","borrow_date"))
+def filter_valid_loans(df: DataFrame):
+    return df.filter(col("days") >=0)
+def category_popularity(df: DataFrame):
+    return df.groupBy("category").agg(count("days").alias("borrows"))
+def top_category(df:DataFrame):
+    return df.orderBy(col("borrows").desc(),col("category").asc()).first()
