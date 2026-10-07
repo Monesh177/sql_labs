@@ -1,0 +1,20 @@
+from typing import Tuple,List
+from pyspark.sql import SparkSession , DataFrame
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+def load_irrigation_data(spark: SparkSession, path: str):
+    df = spark.read.csv(path,header=True,inferSchema=True)
+    df = df.withColumn("irrigation_date",to_date("irrigation_date","yyyy-MM-dd"))
+    return df
+def with_month(df: DataFrame):
+    df = df.withColumn("irrigation_date",col("irrigation_date").cast(DateType()))
+    df = df.withColumn("month",date_trunc("month",col("irrigation_date"))).withColumn("month",to_date("month"))
+    return df
+def filter_valid(df: DataFrame):
+    return df.filter(col("liters_used") >= 0)
+def monthly_crop_water(df: DataFrame):
+    return df.groupBy("crop_type","month").agg(sum("liters_used").alias("total_liters"))
+def top_crop_by_month(df:DataFrame):
+    dfw = df.groupBy("crop_type").agg(sum("total_liters").alias("total_liters")).orderBy(col("total_liters").desc()).collect()
+    return (dfw[0]["crop_type"])
