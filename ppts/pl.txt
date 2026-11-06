@@ -1,0 +1,57 @@
+Slide 1: Databricks Medallion Pipeline
+What is a Data Pipeline?
+
+A data pipeline is an automated sequence of tasks that moves and processes data from source systems to the final destination.
+
+Our Project Pipeline
+
+Azure SQL + ADLS → Bronze → Silver → Gold → Validation → Dashboard
+
+Bronze: Stores raw data from Azure SQL using JDBC and from ADLS using Auto Loader.
+Silver: Cleans, standardizes and validates the Bronze data.
+Gold: Creates business-ready dimensions, facts and analytical summaries.
+Validation: Verifies the correctness and completeness of pipeline results.
+Dashboard: Refreshes only after upstream processing and validation complete successfully.
+
+Bronze stores data, Silver improves data, and Gold gives business meaning to data.
+
+Slide 2: Pipeline Tasks and Data Flow
+Capstone6 Telecom Medallion Pipeline
+Bronze JDBC: Loads Tower, Topology and Region master data from Azure SQL.
+Bronze ADLS: Loads KPI, Outage and Complaint files using Auto Loader.
+Bronze Profiling: Checks row counts, nulls, distinct values and duplicate keys.
+Silver Processing: Applies cleaning and data-quality rules.
+Gold Analytics: Creates dimensions, facts and telecom business summaries.
+Pipeline Validation: Checks data accuracy across all layers.
+Dashboard Refresh: Publishes validated Gold data for reporting.
+Key Pipeline Features
+MERGE prevents identical JDBC records from being inserted again.
+Auto Loader checkpoints prevent previously processed files from being reprocessed.
+Task dependencies ensure notebooks execute in the correct order.
+
+Slide 3: Pipeline Testing and Validation
+Testing
+
+Testing verifies whether the pipeline logic behaves as expected.
+
+Example: If a KPI record contains an invalid Tower ID, Silver should reject the record and store the rejection reason.
+
+Validation
+
+Validation verifies that the output data is correct, complete and consistent.
+
+DQ Reconciliation
+
+Bronze violations = Silver detected issues = Stored DQ issues
+
+Example: 10 = 10 = 10 → PASS
+
+A green job confirms that the code ran successfully. Validation confirms that the produced data is correct.
+
+Slide 4: Regression Testing
+What is Regression Testing?
+
+Regression testing means rerunning existing important tests after a code, rule or configuration change.
+Regression Flow
+
+Bronze Ingestion → Profiling → Silver Processing → Gold Analytics → Validation → Dashboard
