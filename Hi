@@ -1,1 +1,36 @@
 https://trello.com/invite/b/6a9a9d4e0a293ed2bf643a8a/ATTIbd424b81ce86c427984c317a6bdd621e73F79C0A/my-trello-board
+Presentation Script – Technology + Operations
+
+"Now, I am going to explain the technology and operations behind our Amazon platform.
+
+Our platform is designed to provide a fast, secure and reliable shopping experience. To achieve this, we have divided our technology into five major components.
+
+First, Experience.
+
+This is the front end where customers and sellers interact with our platform through the mobile application, website and seller portal.
+
+Second, Platform.
+
+This handles the main shopping activities, such as product search, catalogue, shopping cart, checkout, orders and customer reviews.
+
+Third, Intelligence.
+
+Here, we use smart technologies like product recommendations, fraud detection, demand forecasting and inventory placement. These help us understand customer needs, identify suspicious activities and manage product availability.
+
+Fourth, Operations.
+
+This is responsible for the physical activities behind online shopping. It includes warehouses, sellers, delivery partners and customer service. It ensures that products are stored, packed and delivered to customers.
+
+Fifth, Data and Infrastructure.
+
+This includes databases, search indexes, caching, analytics and monitoring. These components help us store information, retrieve data quickly and monitor the overall performance of the platform.
+
+Now, let's understand how an order moves through our system.
+
+When a customer places an order, the order is confirmed, payment is completed, inventory is reserved, the package is shipped and finally, the product is delivered to the customer. If a return is required, a refund process can also be initiated.
+
+We also give high importance to security and reliability through encryption, multi-factor authentication, secure payments, role-based access, fraud detection, backups and monitoring.
+
+Finally, our architecture uses independently scalable services. This means services like search, checkout and payments can handle increasing demand independently without depending on one large application.
+
+**Overall, our technology and operations work together to provide customers with a smooth, secure and reliable shopping experience."
